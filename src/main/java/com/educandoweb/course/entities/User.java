@@ -1,12 +1,15 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,9 +25,12 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
+	@OneToMany(mappedBy = "client")  // indicando para o JPA que é um relacionamento de uma para muitos, ou seja, um cliente pode ter muitos pedidos, entre parentese o nome do atributo(na classe mesmo não no banco) do pedido que será a chave estragenira, ou associação
+	private List<Order> orders = new ArrayList<>();
+	
 	public User() {
 	}
-
+	
 	public User(Long id, String name, String email, String phone, String password) {
 		super();
 		this.id = id;
@@ -73,6 +79,10 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public List<Order> getOrders() {
+		return orders;
+	}
 
 	@Override
 	public int hashCode() {
@@ -90,6 +100,8 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	
 	
 	
 	
