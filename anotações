@@ -1,0 +1,17 @@
+lazy loading
+
+	Entity
+	o "To many" association, lazy loading, JsonIgnore: exemplos
+	1. quando se tem um pedido de muitos para 1 o jpa aninha a parte 1, é o exemplo do pedido que ja tras seu cliente
+	2. quando o tem um usuario/cliente que pode ter muitos pedido o jpa não aninha na requuisição os pedidos desse cliente, isso é um padrão do JPA
+ 
+ 	3. ou seja que se tem uma associação para muitos o JPA não carregar a associação para muitos, para não estourar a momoria/trafego do computador, so carregara se for acionado os objetos do lado "para muitos"
+ 	4. que controla isso é a anotação "@JsonIgnore" onde colocada na relação
+ 	5. @JsonIgnore   //para não deixar a execução do looping de chamadas das associações no JPA, ele fica maluco, o pedido chama o cliente e os clientes chamam seus pedidos, com esse recurso evita a chamada em looping
+ 	6. exemplo se colocado no cliente, automaticamente carregara os clientes e seus pedidos
+ 	7. exemplo se colocado no pedido, automaticamente carregara os pedidos e seus cliente
+ 	8. importante saber que esse é um recurso da biblioteca "jackson"
+ 	9. outro datalhe importate de saber: no arquivo "application.properties"
+ 		a linha "spring.jpa.open-in-view=true" que permite que o JPA atraves do "jackson" na hora de serializar os Json identifica que precisa dos pedidos do usuario ou vise-versa
+ 		se deixa "spring.jpa.open-in-view=false" não permitira que um objeto com o jackson no ciclo de vida chame o json, na hora de renderiza o json chame o banco para buscar mais informações como os itens, por exemplo os pedidos de um cliente 
+ 		

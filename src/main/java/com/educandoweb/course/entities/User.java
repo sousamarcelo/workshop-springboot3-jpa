@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,7 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
+	@JsonIgnore   //para não deixar a execução do looping de chamadas das associações no JPA, ele fica maluco, o pedido chama o cliente e os clientes chamam seus pedidos, com esse recurso evita a chamada em looping
 	@OneToMany(mappedBy = "client")  // indicando para o JPA que é um relacionamento de uma para muitos, ou seja, um cliente pode ter muitos pedidos, entre parentese o nome do atributo(na classe mesmo não no banco) do pedido que será a chave estragenira, ou associação
 	private List<Order> orders = new ArrayList<>();
 	
