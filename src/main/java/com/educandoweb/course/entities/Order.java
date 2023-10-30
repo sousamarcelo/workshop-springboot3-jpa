@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,8 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")   //informando ao JPA/jackson o padrão da data em GMT/timeZone
 	private Instant moment;
 	
+	private Integer orderStatus;  /* tipo alterado de OrderStatus para Integer para ficar explicito que no banco estamos guardando um valor numerico, esse tratamento é interno da classe order, para o restante do codigo não devera afetar em nada esse tratamento */
+	
 	@ManyToOne  				//indicando para o JPA que é um relacionamento de muitos para um, ou seja, um pedido só pode ter um cliente, mas o cliente pode ter varios pedidos
 	@JoinColumn(name = "client_id")  				//informando nome da chave estragenria no banco de dados
 	private User client;
@@ -33,10 +36,11 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		this.id = id;
 		this.moment = moment;
-		this.client = client;
+		setOrderStatus(orderStatus);
+		this.client = client;		
 	}
 
 	public Long getId() {
@@ -53,6 +57,16 @@ public class Order implements Serializable {
 
 	public void setMoment(Instant moment) {
 		this.moment = moment;
+	}
+		
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);  /* utilizando o metodo de conversão criado lá no OrderStatus para devolver o status ao inves do codigo*/
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();  /* convertendo para numerico para poder guardar no atributo o valor passado no parametro */
+		}
 	}
 
 	public User getClient() {
