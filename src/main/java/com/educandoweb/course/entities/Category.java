@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -22,7 +24,8 @@ public class Category implements Serializable {
 	private Long id;
 	private String name;
 	
-	@Transient
+	@JsonIgnore 										//para evitar loopin infinito e erro jpa, por que as duas classes produtos e categorias são muitos para muitos
+	@ManyToMany(mappedBy = "categories") 				//referenai para o nome da coleção de categorias da classe Product, fazendo referencia ao mapeamente da classe de joins muito para muitos la da classe de produtos no mapeamento feito lá na lista de categorias
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
