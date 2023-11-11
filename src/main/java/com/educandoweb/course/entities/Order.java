@@ -2,7 +2,9 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,6 +35,11 @@ public class Order implements Serializable {
 	@ManyToOne  				//indicando para o JPA que é um relacionamento de muitos para um, ou seja, um pedido só pode ter um cliente, mas o cliente pode ter varios pedidos
 	@JoinColumn(name = "client_id")  				//informando nome da chave estragenria no banco de dados
 	private User client;
+	
+	//criado essa associação somente depois de ter criados as classe OrderItemPk e OrderItem e feito todas a associações necessarias inclusive as associações com o produto
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<>();
+	
 	
 	public Order() {
 	}
@@ -75,6 +83,10 @@ public class Order implements Serializable {
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Set<OrderItem> getItems(){
+		return items;
 	}
 
 	@Override
