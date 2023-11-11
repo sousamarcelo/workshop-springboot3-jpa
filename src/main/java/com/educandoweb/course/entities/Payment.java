@@ -79,5 +79,4 @@ public class Payment implements Serializable {
 		Payment other = (Payment) obj;
 		return Objects.equals(id, other.id);
 	}
-
 }
