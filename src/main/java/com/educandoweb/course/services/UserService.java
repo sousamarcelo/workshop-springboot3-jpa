@@ -31,5 +31,19 @@ public class UserService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+	
+	public User update(Long id, User obj) {
+		User entity = repository.getReferenceById(id); //objeto monitorado em memoria, éssa opção é melhor que utilizar o findById que vai até o bando de dados para buscar a informação tornando o processo mais lento
+		updateData(entity, obj);  //função criada
+		return repository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		// id e senha não serão atualizados pelo methodo update
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+		
+	}
 
 }
