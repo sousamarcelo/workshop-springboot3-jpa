@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -31,6 +34,9 @@ public class Product implements Serializable {
 	@ManyToMany 																	// esse anotation impede que o jpa tente interpretar, isso é provisorio
 	@JoinTable(name = "tb_produtc_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "cateogry_id"))  //Criando a tabela de join, aquela tabela adicional que é criado quando existe uma associação de muitos para muitos , que é o caso de categorias e Produtos
 	private Set<Category> categories = new HashSet<>(); 							//o Set garante que não havera um produto com mais de uma ocorrencia na mesma categoria, outro detalhe ja foi instanciado por que não pode começar como null conforme diagra deve ter uma ou mais categorias
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();
 	
 	public Product() {
 	}
@@ -86,6 +92,16 @@ public class Product implements Serializable {
 	public Set<Category> getCategories() {
 		return categories;
 	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> set = new HashSet<>();
+		
+		for(OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;		
+	}	
 
 	@Override
 	public int hashCode() {
