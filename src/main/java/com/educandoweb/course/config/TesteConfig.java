@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Order;
 import com.educandoweb.course.entities.OrderItem;
+import com.educandoweb.course.entities.Payment;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.entities.enums.OrderStatus;
@@ -84,6 +85,10 @@ public class TesteConfig implements CommandLineRunner {
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 		
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);  	//atenção a peculiaridade para salvar um objeto de relacionamento um para um que é o caso do pagamento do o Pedido, não pode chamar o repository do proprio objeto
+		o1.setPayment(pay1);															//atenção a peculiaridade para salvar um objeto de relacionamento um para um que é o caso do pagamento do o Pedido, não pode chamar o repository do proprio objeto
+		orderRepository.save(o1);  // nesse caso para salvar o pagamento de uma pedido, logo apos o pagmento ter sido setado no pedido na linha de cima será necessari salvar novamente o pedido e no bado e não o pagamento que ja foi setado no pedido
 	}
 	
 	
